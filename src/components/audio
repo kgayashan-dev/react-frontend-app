@@ -1,0 +1,84 @@
+import React, { useState, useEffect } from "react";
+import {
+  BsFillPlayFill,
+  BsFillPauseFill,
+  BsFillStopFill,
+  BsFillSkipEndFill,
+} from "react-icons/bs";
+
+const MyAudioPlayer = ({ audioFiles }) => {
+  const [audioIndex, setAudioIndex] = useState(0);
+  const [audio, setAudio] = useState(new Audio(audioFiles[audioIndex]));
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const playAudio = () => {
+    audio.play();
+    document.title = "Audio Play...";
+    setIsPlaying(true);
+  };
+
+  const pauseAudio = () => {
+    audio.pause();
+    document.title = "Audio Pause.";
+    setIsPlaying(false);
+  };
+
+  const stopAudio = () => {
+    audio.pause();
+    audio.currentTime = 0;
+    document.title = "Audio Stop.";
+    setIsPlaying(false);
+  };
+
+  const nextAudio = () => {
+    if (audioIndex === audioFiles.length - 1) {
+      setAudioIndex(0);
+    } else {
+      setAudioIndex(audioIndex + 1);
+    }
+    setAudio(new Audio(audioFiles[audioIndex]));
+  };
+
+  useEffect(() => {
+    setAudio(new Audio(audioFiles[audioIndex]));
+  }, [audioIndex, audioFiles]);
+
+  const setImage = () => {
+    document.getElementById("file").click();
+  };
+  return (
+    <div className="absolute gap-0 justify-center text-white bottom-0 left-0 mx-4 my-4 cursor-pointer bg-gray-800/[.4] p-2 rounded-md">
+      <div className="flex justify-center">
+        <h2>{isPlaying ? "Audio Play..." : "Audio Paused..."}</h2>
+      </div>
+      <div className="text-5xl flex">
+        <div>
+          <BsFillPauseFill
+            className="p-2 flex items-center m-3 cursor-pointer"
+            onClick={pauseAudio}
+          />
+        </div>
+        <div>
+          <BsFillPlayFill
+            className="p-2 flex items-center m-3 cursor-pointer"
+            onClick={playAudio}
+          />
+        </div>
+        <div>
+          <BsFillStopFill
+            className="p-2 flex items-center m-3 cursor-pointer"
+            onClick={stopAudio}
+          />
+        </div>
+        <div>
+          <BsFillSkipEndFill
+            className="p-2 flex items-center m-3 cursor-pointer"
+            onClick={nextAudio}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MyAudioPlayer;
